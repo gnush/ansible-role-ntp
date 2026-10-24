@@ -1,0 +1,9 @@
+---
+argument_specs:
+  main:
+    options:
+      ntp_allow_client_cidrs:
+        type: list
+        elements: str
+        default: []
+...

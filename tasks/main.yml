@@ -1,5 +1,6 @@
 ---
 # Config first, otherwise would need to restart service to use new config
+# config #
 - name: Create chrony config dir
   ansible.builtin.file:
     path: "{{ ntp_config_file | dirname }}"
@@ -7,6 +8,7 @@
     owner: root
     group: root
     mode: '0755'
+
 - name: Set up chrony config
   ansible.builtin.template:
     src: chrony.conf.j2
@@ -17,6 +19,8 @@
     backup: true
   notify: Restart ntp service
 
+
+## conf.d ##
 - name: Create chrony fragmented config dir
   ansible.builtin.file:
     path: "{{ ntp_conf_d_dir }}"
@@ -24,18 +28,27 @@
     owner: root
     group: root
     mode: '0755'
-- name: Set up chrony fragmented configs
-  ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: "{{ ntp_conf_d_dir }}"
+
+- name: Set up chrony allow.conf
+  ansible.builtin.template:
+    src: allow.conf.j2
+    dest: "{{ ntp_conf_d_dir }}/allow.conf"
     owner: root
     group: root
     mode: '0644'
     backup: true
-  with_fileglob:
-    - "files/*.conf"
+  when: ntp_allow_client_cidrs | length > 0
   notify: Restart ntp service
 
+- name: Remove chrony allow.conf
+  ansible.builtin.file:
+    path: "{{ ntp_conf_d_dir }}/allow.conf"
+    state: absent
+  when: ntp_allow_client_cidrs | length == 0
+  notify: Restart ntp service
+
+
+## sources.d ##
 - name: Create chrony sources dir
   ansible.builtin.file:
     path: "{{ ntp_sources_dir }}"
@@ -43,6 +56,7 @@
     owner: root
     group: root
     mode: '0755'
+
 - name: Set up chrony sources
   ansible.builtin.copy:
     src: "{{ item }}"
@@ -55,6 +69,8 @@
     - "files/*.sources"
   notify: Restart ntp service
 
+
+# setup #
 - name: Install chrony
   ansible.builtin.package:
     name: "chrony"

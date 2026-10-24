@@ -1,0 +1,5 @@
+{{ ansible_managed | comment }}
+
+{% for cidr in ntp_allow_client_cidrs %}
+allow {{ cidr }}
+{% endfor %}

@@ -3,4 +3,13 @@ ntp_service_name: chronyd
 ntp_config_file: /etc/chrony/chrony.conf
 ntp_sources_dir: /etc/chrony/sources.d
 ntp_conf_d_dir: /etc/chrony/conf.d
+
+# Allow internal clients to use this chronyd as an ntp server
+ntp_allow_client_cidrs: []
+# https://www.rfc-editor.org/info/rfc1918/#section-3
+# https://en.wikipedia.org/wiki/Link-local_address
+#  - 10.0.0.0/8
+#  - 172.16.0.0/12
+#  - 192.168.0.0/16
+#  - 169.254.0.0/16
 ...
