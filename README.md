@@ -15,10 +15,10 @@ Defined in `defaults/main.yml`:
 
 | Variable                 | Default                   | Description                                          |
 |--------------------------|---------------------------|------------------------------------------------------|
-| `ntp_service_name`       | `chronyd`                 | Name of the chrony service                           |
+| `ntp_service_name`       | `chrony`                  | Name of the chrony service                           |
 | `ntp_config_file`        | `/etc/chrony/chrony.conf` | Path of the main chrony config file                  |
 | `ntp_sources_dir`        | `/etc/chrony/sources.d`   | Directory for `*.sources` files                      |
-| `ntp_conf_d_dir`         | `/etc/chrony/conf.d`      | Directory for `*.conf` fragments                     |
+| `ntp_conf_d_dir`         | `/etc/chrony/conf.d`      | Directory for `*.conf` dron ins                      |
 | `ntp_allow_client_cidrs` | `[]`                      | Client ranges allowed to use this host as NTP server |
 | `ntp_sources`            | `pool.ntp.org`, `iburst`  | Upstream time sources                                |
 
