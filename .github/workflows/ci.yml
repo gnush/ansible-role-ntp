@@ -27,6 +27,10 @@ jobs:
       - name: Install
         run: pip install ansible-core molecule molecule-plugins[docker]
 
+      # host's chronyd AppArmor profile also confines the container's chronyd by path
+      - name: Unload host chronyd AppArmor profile
+        run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.chronyd || true
+
       - name: Molecule
         run: molecule test --platform-name ${{ matrix.platform }} --destroy never
         env:
@@ -38,9 +42,5 @@ jobs:
         run: |
           docker exec ${{ matrix.platform }} systemctl status chrony --no-pager || true
           docker exec ${{ matrix.platform }} journalctl -xeu chrony --no-pager || true
-          docker exec ${{ matrix.platform }} systemctl cat chrony --no-pager || true
-          docker exec ${{ matrix.platform }} sh -c 'echo DAEMON_OPTS=\"-F 0\" > /etc/default/chrony && systemctl restart chrony && systemctl is-active chrony' || true
-          docker exec ${{ matrix.platform }} journalctl -u chrony -n 15 --no-pager || true
-          docker exec ${{ matrix.platform }} sh -c 'grep chrony /sys/kernel/security/apparmor/profiles' || true
           sudo dmesg | grep -i 'apparmor="DENIED"' | tail -20 || true
 ...
