@@ -39,4 +39,8 @@ jobs:
           docker exec ${{ matrix.platform }} systemctl status chrony --no-pager || true
           docker exec ${{ matrix.platform }} journalctl -xeu chrony --no-pager || true
           docker exec ${{ matrix.platform }} systemctl cat chrony --no-pager || true
+          uname -r
+          docker info --format '{{.SecurityOptions}}'
+          docker exec ${{ matrix.platform }} sh -c 'echo NOTIFY_SOCKET=$NOTIFY_SOCKET; ls -l /run/systemd/notify' || true
+          docker exec ${{ matrix.platform }} sh -c 'echo DAEMON_OPTS=\"-F 0\" > /etc/default/chrony && systemctl restart chrony && systemctl is-active chrony' || true
 ...
