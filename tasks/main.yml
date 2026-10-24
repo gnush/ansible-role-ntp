@@ -1,5 +1,32 @@
 ---
-# Config first, otherwise would need to restart service to use new config
+# setup #
+- name: Install chrony
+  ansible.builtin.package:
+    name: "chrony"
+    state: present
+
+- name: Populate service facts
+  ansible.builtin.service_facts:
+
+- name: Disable conflicting services
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  loop:
+    - ntp
+    - ntpd
+    - ntpsec
+    - openntpd
+    - systemd-timesyncd
+  when: item in ansible_facts.services or (item ~ '.service') in ansible_facts.services
+
+- name: Start chrony service
+  ansible.builtin.service:
+    name: "{{ ntp_service_name }}"
+    state: started
+    enabled: true
+
 # config #
 - name: Create chrony config dir
   ansible.builtin.file:
@@ -74,33 +101,4 @@
     state: absent
   when: ntp_sources | length == 0
   notify: Restart ntp service
-
-
-# setup #
-- name: Install chrony
-  ansible.builtin.package:
-    name: "chrony"
-    state: present
-
-- name: Populate service facts
-  ansible.builtin.service_facts:
-
-- name: Disable conflicting services
-  ansible.builtin.service:
-    name: "{{ item }}"
-    state: stopped
-    enabled: false
-  loop:
-    - ntp
-    - ntpd
-    - ntpsec
-    - openntpd
-    - systemd-timesyncd
-  when: item in ansible_facts.services or (item ~ '.service') in ansible_facts.services
-
-- name: Start chrony service
-  ansible.builtin.service:
-    name: "{{ ntp_service_name }}"
-    state: started
-    enabled: true
 ...
