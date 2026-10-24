@@ -12,6 +12,10 @@ galaxy_info:
         - jammy
         - noble
         - resolute
+    - name: Debian
+      versions:
+        - bookworm
+        - trixie
   galaxy_tags:
     - ntp
     - chrony
