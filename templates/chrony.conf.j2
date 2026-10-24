@@ -42,4 +42,8 @@ makestep 1 3
 # Get TAI-UTC offset and leap seconds from the system tz database.
 # This directive must be commented out when using time sources serving
 # leap-smeared time.
+{% if ansible_facts.packages['chrony'][0].version is version('4.5', '>=') %}
+leapseclist /usr/share/zoneinfo/leap-seconds.list
+{% else %}
 leapsectz right/UTC
+{% endif %}

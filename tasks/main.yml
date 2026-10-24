@@ -5,6 +5,9 @@
     name: "chrony"
     state: present
 
+- name: Populate package facts
+  ansible.builtin.package_facts:
+
 - name: Populate service facts
   ansible.builtin.service_facts:
 
