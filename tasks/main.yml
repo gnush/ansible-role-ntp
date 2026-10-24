@@ -22,7 +22,8 @@
     - ntpsec
     - openntpd
     - systemd-timesyncd
-  when: item in ansible_facts.services or (item ~ '.service') in ansible_facts.services
+  when: >-
+    (ansible_facts.services[item ~ '.service'] | default({})).status | default('not-found') != 'not-found'
 
 - name: Start chrony service
   ansible.builtin.service:
@@ -51,7 +52,7 @@
 
 
 ## conf.d ##
-- name: Create chrony fragmented config dir
+- name: Create chrony drop in config dir
   ansible.builtin.file:
     path: "{{ ntp_conf_d_dir }}"
     state: directory
