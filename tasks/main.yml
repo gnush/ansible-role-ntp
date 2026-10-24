@@ -58,15 +58,21 @@
     mode: '0755'
 
 - name: Set up chrony sources
-  ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: "{{ ntp_sources_dir }}"
+  ansible.builtin.template:
+    src: ntp.sources.j2
+    dest: "{{ ntp_sources_dir }}/ntp.sources"
     owner: root
     group: root
     mode: '0644'
     backup: true
-  with_fileglob:
-    - "files/*.sources"
+  when: ntp_sources | length > 0
+  notify: Restart ntp service
+
+- name: Remove chrony sources
+  ansible.builtin.file:
+    path: "{{ ntp_sources_dir }}/ntp.sources"
+    state: absent
+  when: ntp_sources | length == 0
   notify: Restart ntp service
 
 

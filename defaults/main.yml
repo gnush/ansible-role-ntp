@@ -12,4 +12,9 @@ ntp_allow_client_cidrs: []
 #  - 172.16.0.0/12
 #  - 192.168.0.0/16
 #  - 169.254.0.0/16
+
+ntp_sources:
+  - type: pool
+    host: pool.ntp.org
+    options: [iburst]
 ...

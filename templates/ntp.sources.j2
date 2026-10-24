@@ -1,0 +1,5 @@
+{{ ansible_managed | comment }}
+
+{% for src in ntp_sources %}
+{{ src.type }} {{ src.host }}{% for opt in (src.options | default([])) %} {{ opt }}{% endfor %}
+{% endfor %}

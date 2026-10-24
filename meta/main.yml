@@ -5,7 +5,7 @@ galaxy_info:
   author: gnush
   description: NTP (chrony) role
   license: MIT
-  min_ansible_version: 2.10.0
+  min_ansible_version: "2.11"
   platforms:
     - name: Ubuntu
       versions:

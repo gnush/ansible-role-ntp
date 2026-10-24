@@ -6,4 +6,23 @@ argument_specs:
         type: list
         elements: str
         default: []
+      ntp_sources:
+        type: list
+        elements: dict
+        default:
+          - type: pool
+            host: pool.ntp.org
+            options: [iburst]
+        options:
+          type:
+            type: str
+            required: true
+            choices: [pool, server]
+          host:
+            type: str
+            required: true
+          options:
+            type: list
+            elements: str
+            default: []
 ...
