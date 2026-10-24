@@ -28,8 +28,15 @@ jobs:
         run: pip install ansible-core molecule molecule-plugins[docker]
 
       - name: Molecule
-        run: molecule test --platform-name ${{ matrix.platform }}
+        run: molecule test --platform-name ${{ matrix.platform }} --destroy never
         env:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
+
+      - name: Chrony logs
+        if: failure()
+        run: |
+          docker exec ${{ matrix.platform }} systemctl status chrony --no-pager || true
+          docker exec ${{ matrix.platform }} journalctl -xeu chrony --no-pager || true
+          docker exec ${{ matrix.platform }} systemctl cat chrony --no-pager || true
 ...
