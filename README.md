@@ -6,7 +6,7 @@ server for clients on private and link-local networks.
 
 ## Requirements
 
-- Ubuntu
+- Ubuntu >= 22.04
 - Ansible >= 2.10
 - Root privileges (`become: true`)
 

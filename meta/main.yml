@@ -9,7 +9,9 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - all
+        - jammy
+        - noble
+        - resolute
   galaxy_tags:
     - ntp
     - chrony
