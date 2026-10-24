@@ -75,7 +75,7 @@
     - ntpsec
     - openntpd
     - systemd-timesyncd
-  when: item in ansible_facts.services
+  when: item in ansible_facts.services or (item ~ '.service') in ansible_facts.services
 
 - name: Start chrony service
   ansible.builtin.service:
