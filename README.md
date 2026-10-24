@@ -18,8 +18,8 @@ Defined in `defaults/main.yml`:
 |--------------------|----------------------------|-------------------------------------|
 | `ntp_service_name` | `chronyd`                  | Name of the chrony service          |
 | `ntp_config_file`  | `/etc/chrony/chrony.conf`  | Path of the main chrony config file |
-| `ntp_sources_dir`  | `/etc/chrony/sources.d/`   | Directory for `*.sources` files     |
-| `ntp_conf_d_dir`   | `/etc/chrony/conf.d/`      | Directory for `*.conf` fragments    |
+| `ntp_sources_dir`  | `/etc/chrony/sources.d`    | Directory for `*.sources` files     |
+| `ntp_conf_d_dir`   | `/etc/chrony/conf.d`       | Directory for `*.conf` fragments    |
 
 ## Example Playbook
 
@@ -32,9 +32,9 @@ Defined in `defaults/main.yml`:
 
 ## Chrony Configuration
 
-`files/chrony.conf` is based on the default Ubuntu config.
+`templates/chrony.conf.j2` is based on the default Ubuntu config.
 
-Every other `*.conf` file in `files/` is copied to `ntp_conf_d_dir`. Every
+Every `*.conf` file in `files/` is copied to `ntp_conf_d_dir`. Every
 `*.sources` file is copied to `ntp_sources_dir`. To add config, drop a new file
 into `files/`.
 

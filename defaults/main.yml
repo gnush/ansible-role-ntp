@@ -1,6 +1,6 @@
 ---
 ntp_service_name: chronyd
 ntp_config_file: /etc/chrony/chrony.conf
-ntp_sources_dir: /etc/chrony/sources.d/
-ntp_conf_d_dir: /etc/chrony/conf.d/
+ntp_sources_dir: /etc/chrony/sources.d
+ntp_conf_d_dir: /etc/chrony/conf.d
 ...

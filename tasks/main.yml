@@ -8,8 +8,8 @@
     group: root
     mode: '0755'
 - name: Set up chrony config
-  ansible.builtin.copy:
-    src: files/chrony.conf
+  ansible.builtin.template:
+    src: chrony.conf.j2
     dest: "{{ ntp_config_file }}"
     owner: root
     group: root
@@ -34,7 +34,6 @@
     backup: true
   with_fileglob:
     - "files/*.conf"
-  when: "'chrony.conf' not in item"
   notify: Restart ntp service
 
 - name: Create chrony sources dir
