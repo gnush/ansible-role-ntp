@@ -1,0 +1,85 @@
+---
+# Config first, otherwise would need to restart service to use new config
+- name: Create chrony config dir
+  ansible.builtin.file:
+    path: "{{ ntp_config_file | dirname }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+- name: Set up chrony config
+  ansible.builtin.copy:
+    src: files/chrony.conf
+    dest: "{{ ntp_config_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  notify: Restart ntp service
+
+- name: Create chrony fragmented config dir
+  ansible.builtin.file:
+    path: "{{ ntp_conf_d_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+- name: Set up chrony fragmented configs
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ ntp_conf_d_dir }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  with_fileglob:
+    - "files/*.conf"
+  when: "'chrony.conf' not in item"
+  notify: Restart ntp service
+
+- name: Create chrony sources dir
+  ansible.builtin.file:
+    path: "{{ ntp_sources_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+- name: Set up chrony sources
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ ntp_sources_dir }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  with_fileglob:
+    - "files/*.sources"
+  notify: Restart ntp service
+
+- name: Install chrony
+  ansible.builtin.package:
+    name: "chrony"
+    state: present
+
+- name: Populate service facts
+  ansible.builtin.service_facts:
+
+- name: Disable conflicting services
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  loop:
+    - ntp
+    - ntpd
+    - ntpsec
+    - openntpd
+    - systemd-timesyncd
+  when: item in ansible_facts.services
+
+- name: Start chrony service
+  ansible.builtin.service:
+    name: "{{ ntp_service_name }}"
+    state: started
+    enabled: true
+...
