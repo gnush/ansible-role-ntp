@@ -1,0 +1,24 @@
+---
+# images ship with empty apt lists
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+
+    # chrony >= 4.8 unit skips containers
+    - name: Create chrony unit drop-in dir
+      ansible.builtin.file:
+        path: /etc/systemd/system/chrony.service.d
+        state: directory
+        mode: '0755'
+
+    - name: Allow chrony in containers
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/chrony.service.d/container.conf
+        content: |
+          [Unit]
+          ConditionVirtualization=
+        mode: '0644'
+...

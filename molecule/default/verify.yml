@@ -1,0 +1,20 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Check config
+      ansible.builtin.command: chronyd -p -f /etc/chrony/chrony.conf
+      changed_when: false
+
+    - name: Check chrony is enabled
+      ansible.builtin.command: systemctl is-enabled chrony
+      changed_when: false
+
+    - name: Check chrony is running
+      ansible.builtin.command: systemctl is-active chrony
+      changed_when: false
+
+    - name: Check chronyc to chronyd
+      ansible.builtin.command: chronyc -n sources
+      changed_when: false
+...
