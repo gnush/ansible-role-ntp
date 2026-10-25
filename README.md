@@ -4,7 +4,7 @@ Installs and configures [chrony](https://chrony-project.org/) as the NTP daemon.
 
 ## Requirements
 
-- Ubuntu >= 22.04 
+- Ubuntu >= 22.04  
   Debian >= 12
 - Ansible >= 2.11
 - Root privileges (`become: true`)
